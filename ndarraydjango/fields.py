@@ -107,7 +107,7 @@ class NDArrayField(models.BinaryField):
                 value = np.array(json.loads(value), dtype=self.dtype)
             except json.decoder.JSONDecodeError:
                 raise exceptions.ValidationError(
-                    "Can not decode string", code="badstring"
+                    "Can not decode json string", code="badjson"
                 )
             self.validate(value, None)
             return value

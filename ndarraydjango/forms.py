@@ -18,6 +18,7 @@
 #
 import numpy as np
 from django import forms
+from django.core import exceptions
 import json
 
 
@@ -29,7 +30,13 @@ class NDArrayFormField(forms.CharField):
 
     def to_python(self, value):
         value = super().to_python(value)
-        value = json.loads(value)
+        try:
+            value = json.loads(value)
+        except json.decoder.JSONDecodeError:
+            raise exceptions.ValidationError(
+                "Can not decode json string", code="badjson"
+            )
+
         return value
 
     def has_changed(self, initial_value, data_value):
