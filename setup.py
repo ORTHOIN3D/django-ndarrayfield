@@ -18,11 +18,18 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-from distutils.core import setup
+import setuptools
 
-setup(
+# read the contents of your README file
+from os import path
+
+this_directory = path.abspath(path.dirname(__file__))
+with open(path.join(this_directory, "README.md"), encoding="utf-8") as f:
+    long_description = f.read()
+
+setuptools.setup(
     name="django-ndarrayfield",
-    version="1.0.0rc1",
+    version="1.0.0rc2",
     description="Yet another numpy ndarray fields for Django",
     author="Aurélien Moreau",
     author_email="aurelien.moreau@yienyien.net",
@@ -33,4 +40,6 @@ setup(
         "Django",
     ],
     python_requires=">=3.6",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
 )
