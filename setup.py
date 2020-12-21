@@ -29,7 +29,7 @@ with open(path.join(this_directory, "README.md"), encoding="utf-8") as f:
 
 setuptools.setup(
     name="django-ndarrayfield",
-    version="1.0.0rc2",
+    version="1.0.0rc3",
     description="Yet another numpy ndarray fields for Django",
     author="Aurélien Moreau",
     author_email="aurelien.moreau@yienyien.net",
