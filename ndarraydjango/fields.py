@@ -80,6 +80,13 @@ class NDArrayField(models.BinaryField):
         return parse_numpy_array(value)
 
     def validate(self, value, model_instance):
+        
+        if (
+            ( value is None and self.blank ) or 
+            ( value is None and self.null  )
+        ):
+            return
+
         if self.shape is not None and value.shape != self.shape:
             raise exceptions.ValidationError("Bad shape", code="shape")
 
@@ -103,6 +110,11 @@ class NDArrayField(models.BinaryField):
             return value
 
         if isinstance(value, str):
+            if (
+                ( value=='' and self.blank ) or 
+                ( value=='' and self.null  )
+            ):
+                return None
             try:
                 value = np.array(json.loads(value), dtype=self.dtype)
             except json.decoder.JSONDecodeError:
