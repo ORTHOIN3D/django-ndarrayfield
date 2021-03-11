@@ -30,6 +30,8 @@ class NDArrayFormField(forms.CharField):
 
     def to_python(self, value):
         value = super().to_python(value)
+        if (value==self.empty_value) and (not self.required):
+            return value
         try:
             value = json.loads(value)
         except json.decoder.JSONDecodeError:
