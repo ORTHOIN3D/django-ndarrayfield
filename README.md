@@ -18,6 +18,14 @@ class MyModel(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 ```
 
+## Parameters
+
+* **dtype**: the ndarray dtype (default np.float32)
+* **shape**: the ndarray shape (default None)
+* **binary_serialize**: when dump data, serialize to binary (base64) or json lists (default False)
+
+
+
 ## Warning
 This field type does not replace a static file storage.
 The main goal is to store parameter data, results of algorithms and

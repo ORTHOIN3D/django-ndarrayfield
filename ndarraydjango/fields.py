@@ -51,6 +51,8 @@ class NDArrayField(models.BinaryField):
         kwargs.setdefault("editable", True)
         self.shape = kwargs.pop("shape", None)
         self.dtype = kwargs.pop("dtype", np.float32)
+        self.binary_serialize = kwargs.pop("binary_serialize", False)
+
         super().__init__(*args, **kwargs)
 
     def deconstruct(self):
@@ -61,6 +63,9 @@ class NDArrayField(models.BinaryField):
 
         if self.dtype != np.float32:
             kwargs["dtype"] = self.dtype
+
+        if self.binary_serialize:
+            kwargs["binary_serialize"] = self.binary_serialize
 
         return name, path, args, kwargs
 
@@ -88,6 +93,13 @@ class NDArrayField(models.BinaryField):
 
         if not self.blank and value is None or value.size == 0:
             raise exceptions.ValidationError(self.error_messages["blank"], code="blank")
+
+    def value_to_string(self, obj):
+        if self.binary_serialize:
+            return super().value_to_string(obj)
+        else:
+            value = self.value_from_object(obj)
+            return value.tolist()
 
     def to_python(self, value):
         if isinstance(value, list):
