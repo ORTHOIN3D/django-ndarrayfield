@@ -81,11 +81,12 @@ class NDArrayField(models.BinaryField):
     def from_db_value(self, value, expression, connection):
         if value is None:
             return value
-
         return parse_numpy_array(value)
 
     def validate(self, value, model_instance):
-        if self.shape is not None and value.shape != self.shape:
+        try:
+            value.reshape(self.shape)
+        except ValueError:
             raise exceptions.ValidationError("Bad shape", code="shape")
 
         if value is None and not self.null:
@@ -104,7 +105,7 @@ class NDArrayField(models.BinaryField):
     def to_python(self, value):
         if isinstance(value, list):
             try:
-                return np.array(value, dtype=self.dtype)
+                return np.array(value, dtype=self.dtype).reshape(self.shape)
             except ValueError:
                 raise exceptions.ValidationError(
                     "Can not convert list to numpy array", "badlist"
